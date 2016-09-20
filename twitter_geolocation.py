@@ -78,4 +78,4 @@ class CustomStreamListener(tweepy.StreamListener):
 # Online-Tool to create boxes (c+p as raw CSV): http://boundingbox.klokantech.com/
 # Western Australia GeoBox  112.92,-35.19,129.0,-13.69
 sapi = tweepy.streaming.Stream(auth, CustomStreamListener())
-sapi.filter(locations= locs,languages=['en'], async=False)
+sapi.filter(locations= locs,languages=['en'], async=True)
