@@ -22,15 +22,6 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-'''
-    Keywords: fever , cough, sick, flu, cold,  headache, pain, sore throat,
-              lethargy,  muscle aches, sinusitis
-'''
-'''
-keywords = ["fever" , "cough", " flu ", "nose",  "headache",
-           "sore throat", "sinusitis","infect"]
-'''
-#locs = [112.92,-35.19,129.0,-13.69] #Only Western Australia
 locs = [112.9,-45.3,154.7,-11.2] #Australia
 
 class CustomStreamListener(tweepy.StreamListener):
@@ -45,12 +36,23 @@ class CustomStreamListener(tweepy.StreamListener):
             id= hashlib.sha224(tweet.id_str).hexdigest()
             idUser= hashlib.sha224(tweet.author._json['id_str']).hexdigest()
             username= hashlib.sha224(tweet.author._json['screen_name']).hexdigest()
+            coordinates = tweet._json['coordinates']
+
+            # Coordinates are returned only if geo enable is True
+            if(coordinates is None):
+                lat = 'None'
+                lon = 'None'
+            else:
+                lat = coordinates[u'coordinates'][1]
+                lon = coordinates[u'coordinates'][0]
 
             data = OrderedDict([
                  ('id_tweet', id),
                  ('source',tweet.source),
                  ('created_at',str(tweet.created_at)),
                  ('location', tweet.author._json['location']),
+                 ('lat', lat),
+                 ('lon', lon),
                  ('time_zone', tweet.user.time_zone),
                  ('id_user', idUser),
                  ('username', username),
@@ -78,4 +80,4 @@ class CustomStreamListener(tweepy.StreamListener):
 # Online-Tool to create boxes (c+p as raw CSV): http://boundingbox.klokantech.com/
 # Western Australia GeoBox  112.92,-35.19,129.0,-13.69
 sapi = tweepy.streaming.Stream(auth, CustomStreamListener())
-sapi.filter(locations= locs,languages=['en'], async=True)
+sapi.filter(locations= locs,languages=['en'], async=False)
