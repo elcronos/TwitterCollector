@@ -59,8 +59,7 @@ class CustomStreamListener(tweepy.StreamListener):
                  ('text' , text)
              ])
 
-            # Writing JSON data
-            with open('tweetDB-AU.json', 'a') as f:
+            with open('tweetDB-AU-15-Oct.json', 'a') as f:
                 json.dump(data,f, sort_keys=False)
                 f.write('\n')
 
@@ -80,4 +79,4 @@ class CustomStreamListener(tweepy.StreamListener):
 # Online-Tool to create boxes (c+p as raw CSV): http://boundingbox.klokantech.com/
 # Western Australia GeoBox  112.92,-35.19,129.0,-13.69
 sapi = tweepy.streaming.Stream(auth, CustomStreamListener())
-sapi.filter(locations= locs,languages=['en'], async=True)
+sapi.filter(locations= locs,languages=['en'], async=False)
